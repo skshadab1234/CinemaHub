@@ -16,7 +16,7 @@ const Header = () => {
         e.preventDefault();
         // Perform search logic here, like routing or API call
         console.log("Searching for:", searchQuery);
-        router.push(`?search=${searchQuery}`) // Redirect to search page with query parameter
+        router.push(`/?search=${searchQuery}`) // Redirect to search page with query parameter
     };
 
     return (
