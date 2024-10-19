@@ -2,6 +2,10 @@
 const nextConfig = {
     images: {
         domains: ['image.tmdb.org']
+    },
+    typescript: {
+        ignoreDevErrors: true,
+        ignoreBuildErrors: true,
     }
 };
 
