@@ -60,7 +60,7 @@ const HomePage = () => {
   )
 
   return (
-    <Suspense>
+    <Suspense fallback="Loading....">
       <div className='container mx-auto p-4'>
         {/* Heading */}
         <h1 className='text-3xl font-bold mb-6'>
