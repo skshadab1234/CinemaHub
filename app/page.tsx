@@ -1,5 +1,5 @@
 "use client"
-import React, { useEffect, useState } from 'react'
+import React, { Suspense, useEffect, useState } from 'react'
 import MovieCard from './components/MovieCard'
 import { useSearchParams } from 'next/navigation'
 
@@ -60,77 +60,79 @@ const HomePage = () => {
   )
 
   return (
-    <div className='container mx-auto p-4'>
-      {/* Heading */}
-      <h1 className='text-3xl font-bold mb-6'>
-        {search ? `Search Results for: ${search}` : 'Popular Movies'}
-      </h1>
+    <Suspense>
+      <div className='container mx-auto p-4'>
+        {/* Heading */}
+        <h1 className='text-3xl font-bold mb-6'>
+          {search ? `Search Results for: ${search}` : 'Popular Movies'}
+        </h1>
 
-      {/* Pagination at the top */}
-      <div className='flex justify-center mb-4'>
-        <button
-          onClick={() => setPage(prev => Math.max(prev - 1, 1))}
-          disabled={page === 1}
-          className="px-4 py-2 bg-gray-300 text-gray-700 rounded-l-lg disabled:opacity-50"
-        >
-          Previous
-        </button>
-        <span className="px-4 py-2 bg-gray-200 text-gray-800">
-          Page {page} of {totalPages}
-        </span>
-        <button
-          onClick={() => setPage(prev => Math.min(prev + 1, totalPages))}
-          disabled={page === totalPages}
-          className="px-4 py-2 bg-gray-300 text-gray-700 rounded-r-lg disabled:opacity-50"
-        >
-          Next
-        </button>
+        {/* Pagination at the top */}
+        <div className='flex justify-center mb-4'>
+          <button
+            onClick={() => setPage(prev => Math.max(prev - 1, 1))}
+            disabled={page === 1}
+            className="px-4 py-2 bg-gray-300 text-gray-700 rounded-l-lg disabled:opacity-50"
+          >
+            Previous
+          </button>
+          <span className="px-4 py-2 bg-gray-200 text-gray-800">
+            Page {page} of {totalPages}
+          </span>
+          <button
+            onClick={() => setPage(prev => Math.min(prev + 1, totalPages))}
+            disabled={page === totalPages}
+            className="px-4 py-2 bg-gray-300 text-gray-700 rounded-r-lg disabled:opacity-50"
+          >
+            Next
+          </button>
+        </div>
+
+        {/* Movie Cards or Skeleton Loader */}
+        {
+          loading ? (
+            <SkeletonLoader /> // If loading, show skeleton
+          ) : (
+            <div className='grid grid-cols-2 md:grid-cols-7 gap-5'>
+              {allMovies?.length === 0 ? (
+                'No movies found' // If no movies found
+              ) : (
+                allMovies.map((movie: any, index: number) => (
+                  <MovieCard
+                    key={index}
+                    id={movie.id}
+                    title={movie.title}
+                    posterUrl={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
+                    rating={movie.vote_average}
+                  />
+                )) // If movies are found, show them
+              )}
+            </div>
+          )
+        }
+
+        {/* Pagination at the bottom */}
+        <div className='flex justify-center mt-4'>
+          <button
+            onClick={() => setPage(prev => Math.max(prev - 1, 1))}
+            disabled={page === 1}
+            className="px-4 py-2 bg-gray-300 text-gray-700 rounded-l-lg disabled:opacity-50"
+          >
+            Previous
+          </button>
+          <span className="px-4 py-2 bg-gray-200 text-gray-800">
+            Page {page} of {totalPages}
+          </span>
+          <button
+            onClick={() => setPage(prev => Math.min(prev + 1, totalPages))}
+            disabled={page === totalPages}
+            className="px-4 py-2 bg-gray-300 text-gray-700 rounded-r-lg disabled:opacity-50"
+          >
+            Next
+          </button>
+        </div>
       </div>
-
-      {/* Movie Cards or Skeleton Loader */}
-      {
-        loading ? (
-          <SkeletonLoader /> // If loading, show skeleton
-        ) : (
-          <div className='grid grid-cols-2 md:grid-cols-7 gap-5'>
-            {allMovies?.length === 0 ? (
-              'No movies found' // If no movies found
-            ) : (
-              allMovies.map((movie: any, index: number) => (
-                <MovieCard
-                  key={index}
-                  id={movie.id}
-                  title={movie.title}
-                  posterUrl={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
-                  rating={movie.vote_average}
-                />
-              )) // If movies are found, show them
-            )}
-          </div>
-        )
-      }
-
-      {/* Pagination at the bottom */}
-      <div className='flex justify-center mt-4'>
-        <button
-          onClick={() => setPage(prev => Math.max(prev - 1, 1))}
-          disabled={page === 1}
-          className="px-4 py-2 bg-gray-300 text-gray-700 rounded-l-lg disabled:opacity-50"
-        >
-          Previous
-        </button>
-        <span className="px-4 py-2 bg-gray-200 text-gray-800">
-          Page {page} of {totalPages}
-        </span>
-        <button
-          onClick={() => setPage(prev => Math.min(prev + 1, totalPages))}
-          disabled={page === totalPages}
-          className="px-4 py-2 bg-gray-300 text-gray-700 rounded-r-lg disabled:opacity-50"
-        >
-          Next
-        </button>
-      </div>
-    </div>
+    </Suspense>
   )
 }
 
